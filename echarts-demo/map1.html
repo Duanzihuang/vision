@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>地图</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0-0/axios.js"></script>
+  </head>
+  <body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'))
+
+      axios
+        .get('http://huangjiangjun.top/echarts/province/anhui.json')
+        .then(res => {
+          echarts.registerMap('anhui', res.data)
+
+          const option = {
+            geo: {
+              type: 'map',
+              map: 'anhui',
+              roam: true, // 设置允许缩放以及拖动的效果
+              label: {
+                // show: true
+              }
+            }
+          }
+
+          // 使用刚指定的配置项和数据显示图表。
+          myChart.setOption(option)
+        })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Echarts入门demo</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.js"></script>
+  </head>
+  <body>
+    <div id="container" style="width:600px;height: 400px;"></div>
+  </body>
+  <script>
+    // 基于准备好的dom，初始化echarts实例
+    const myChart = echarts.init(document.getElementById('container'))
+
+    // 指定图表的配置项和数据
+    const option = {
+      // 标题
+      title: {
+        text: 'ECharts 入门示例-数学成绩统计'
+      },
+      legend: {
+        data: ['数学成绩', '语文成绩'],
+        bottom: 0
+      },
+      // 提示
+      tooltip: {
+        // trigger: 'item'
+        trigger: 'axis',
+        // formatter: '{b} 的成绩是 {c}'
+        formatter: arg => {
+          return arg[0].name + ' 的分数是: ' + arg[0].data
+        }
+      },
+      // 工具
+      toolbox: {
+        feature: {
+          saveAsImage: {}, // 导出图片
+          dataView: {}, //数据视图
+          restore: {}, // 重置
+          dataZoom: {}, // 区域缩放
+          magicType: {
+            // 动态类型切换
+            type: ['bar', 'line']
+          }
+        }
+      },
+      xAxis: {
+        type: 'category', // 类目轴
+        data: ['小明', '小红', '小黄']
+      },
+      yAxis: {
+        type: 'value' // 数值轴
+      },
+      series: [
+        {
+          name: '数学成绩',
+          type: 'bar', // 图表类型
+          // 最大最小值
+          markPoint: {
+            data: [
+              {
+                type: 'max',
+                name: '最大值'
+              },
+              {
+                type: 'min',
+                name: '最小值'
+              }
+            ]
+          },
+          // 平均值
+          markLine: {
+            data: [
+              {
+                type: 'average',
+                name: '平均值'
+              }
+            ]
+          },
+          // 是否显示内容
+          label: {
+            show: true,
+            rotate: 60, // 旋转60度
+            position: 'inside' // 位置
+          },
+          // barWidth: '30%',
+          data: [80, 65, 90]
+        },
+        {
+          name: '语文成绩',
+          type: 'bar',
+          markPoint: {
+            data: [
+              {
+                type: 'max',
+                name: '最大值'
+              },
+              {
+                type: 'min',
+                name: '最小值'
+              }
+            ]
+          },
+          // 平均值
+          markLine: {
+            data: [
+              {
+                type: 'average',
+                name: '平均值'
+              }
+            ]
+          },
+          // 是否显示内容
+          label: {
+            show: true,
+            rotate: 60, // 旋转60度
+            position: 'inside' // 位置
+          },
+          data: [90, 80, 95]
+        }
+      ]
+    }
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option)
+  </script>
+</html>

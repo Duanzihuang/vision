@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>散点图</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.js"></script>
+  </head>
+  <body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'))
+
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: 'ECharts 散点图示例'
+        },
+        tooltip: {},
+        xAxis: {
+          type: 'value',
+          scale: true
+        },
+        yAxis: {
+          type: 'value',
+          scale: true
+        },
+        series: [
+          {
+            name: '身高-体重',
+            // type: 'scatter',
+            type: 'effectScatter',
+            // showEffectOn: 'emphasis', // render emphasis
+            rippleEffect: {
+              scale: 5
+            },
+            data: [
+              [160, 50],
+              [161, 51],
+              [162, 52],
+              [163, 80],
+              [164, 52],
+              [165, 53],
+              [166, 54],
+              [167, 55],
+              [168, 56],
+              [169, 57],
+              [170, 58]
+            ],
+            symbolSize: function (arg) {
+              const height = arg[0] / 100
+              const weigth = arg[1]
+              // bmi = 体重(kg) / 身高(m) * 身高(m) 代表28就代表肥胖
+              const bmi = weigth / (height * height)
+              if (bmi > 28) {
+                return 20
+              }
+
+              return 5
+            },
+            itemStyle: {
+              color: function (arg) {
+                const height = arg.data[0] / 100
+                const weigth = arg.data[1]
+                // bmi = 体重(kg) / 身高(m) * 身高(m) 代表28就代表肥胖
+                const bmi = weigth / (height * height)
+                if (bmi > 28) {
+                  return 'red'
+                }
+
+                return 'green'
+              }
+            }
+          }
+        ]
+      }
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option)
+    </script>
+  </body>
+</html>

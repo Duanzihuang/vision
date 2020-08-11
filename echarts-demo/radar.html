@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>雷达图</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.js"></script>
+  </head>
+  <body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+      //1. ECharts最基本的代码结构
+      //2. 定义各个维度的最大值, 通过radar属性配置
+      //   易用性,功能,拍照,跑分,续航, 每个维度的最大值都是100
+      //3. 准备产品数据, 设置给series下的data
+      //   华为手机1: 80, 90, 80, 82, 90
+      //   中兴手机1: 70, 82, 75, 70, 78
+      //4. 将type的值设置为radar
+
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'))
+
+      // 各个维度的最大值
+      var dataMax = [
+        {
+          name: '易用性',
+          max: 100
+        },
+        {
+          name: '功能',
+          max: 100
+        },
+        {
+          name: '拍照',
+          max: 100
+        },
+        {
+          name: '跑分',
+          max: 100
+        },
+        {
+          name: '续航',
+          max: 100
+        }
+      ]
+
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: 'ECharts 雷达图示例'
+        },
+        radar: {
+          indicator: dataMax, // 配置各个维度的最大值
+          shape: 'polygon' // 配置雷达图最外层的图形 circle polygon
+        },
+        series: [
+          {
+            type: 'radar', // radar 此图表示的是一个雷达图
+            label: {
+              //   show: true
+            },
+            data: [
+              {
+                name: '华为P30',
+                value: [80, 90, 80, 82, 90]
+              },
+              {
+                name: '红米10',
+                value: [70, 82, 75, 70, 78]
+              }
+            ]
+            // areaStyle: {} // 将每一个产品的雷达图形成阴影的面积
+          }
+        ]
+      }
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option)
+    </script>
+  </body>
+</html>

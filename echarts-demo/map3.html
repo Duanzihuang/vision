@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>地图</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.20.0-0/axios.js"></script>
+  </head>
+  <body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'))
+
+      //1. 显示基本的中国地图
+      //2. 将空气质量的数据设置给series下的对象
+      //3. 将series下的数据和geo关联起来
+      //4. 配置visualMap
+      var airData = [
+        { name: '北京', value: 39.92 },
+        { name: '天津', value: 39.13 },
+        { name: '上海', value: 31.22 },
+        { name: '重庆', value: 66 },
+        { name: '河北', value: 147 },
+        { name: '河南', value: 113 },
+        { name: '云南', value: 25.04 },
+        { name: '辽宁', value: 50 },
+        { name: '黑龙江', value: 114 },
+        { name: '湖南', value: 175 },
+        { name: '安徽', value: 117 },
+        { name: '山东', value: 92 },
+        { name: '新疆', value: 84 },
+        { name: '江苏', value: 67 },
+        { name: '浙江', value: 84 },
+        { name: '江西', value: 96 },
+        { name: '湖北', value: 273 },
+        { name: '广西', value: 59 },
+        { name: '甘肃', value: 99 },
+        { name: '山西', value: 39 },
+        { name: '内蒙古', value: 58 },
+        { name: '陕西', value: 61 },
+        { name: '吉林', value: 51 },
+        { name: '福建', value: 29 },
+        { name: '贵州', value: 71 },
+        { name: '广东', value: 38 },
+        { name: '青海', value: 57 },
+        { name: '西藏', value: 24 },
+        { name: '四川', value: 58 },
+        { name: '宁夏', value: 52 },
+        { name: '海南', value: 54 },
+        { name: '台湾', value: 88 },
+        { name: '香港', value: 66 },
+        { name: '澳门', value: 77 },
+        { name: '南海诸岛', value: 55 }
+      ]
+      var scatterData = [
+        {
+          value: [117.283042, 31.86119]
+        }
+      ]
+      axios.get('http://huangjiangjun.top/echarts/china.json').then(res => {
+        echarts.registerMap('chinaMap', res.data)
+
+        const option = {
+          title: {
+            text: 'ECharts 地图示例'
+          },
+          geo: {
+            type: 'map',
+            map: 'chinaMap',
+            roam: true, // 设置允许缩放以及拖动的效果
+            label: {
+              // show: true
+            }
+          },
+          series: [
+            {
+              data: airData,
+              geoIndex: 0, // 将空气质量的数据和第0个geo配置关联在一起
+              type: 'map'
+            },
+            {
+              data: scatterData, // 配置散点的坐标数据
+              type: 'effectScatter',
+              coordinateSystem: 'geo', // 指明散点使用的坐标系统 geo的坐标系统
+              rippleEffect: {
+                scale: 10 // 设置涟漪动画的缩放比例
+              }
+            }
+          ],
+          visualMap: {
+            min: 0,
+            max: 300,
+            inRange: {
+              color: ['white', 'red'] // 控制颜色渐变的范围
+            },
+            calculable: true // 出现滑块
+          }
+        }
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option)
+      })
+    </script>
+  </body>
+</html>

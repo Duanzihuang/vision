@@ -872,3 +872,76 @@
 
 ## Echarts高级
 
+> 显示相关
+
+- 主题
+
+  内置主题：light、dark
+
+  自定义主题：https://echarts.apache.org/zh/theme-builder.html
+
+- 调色盘
+
+  主题调色盘
+
+  全局调色盘
+
+  局部调色盘
+
+  线性渐变
+
+  径向渐变
+
+- 样式
+
+  直接样式：itemStyle、textStyle、lineStyle、areaStyle、label
+
+  高亮样式：在emphasis中包裹itemStyle、textStyle、lineStyle、areaStyle、label
+
+- 自适应
+
+  当浏览器的大小发生变化的时候，让图表也能随之适配变化
+
+  监听窗口大小变化事件，在事件处理函数中调用ECharts实例对象的resize即可
+
+> 动画使用
+
+- 加载动画
+
+  ECharts已经内置好了加载数据的动画，我们只需要在合适的时机显示或者隐藏即可
+
+  显示加载动画：mCharts.showLoading()
+
+  隐藏加载动画：mCharts.hideLoading()
+
+- 增量动画
+
+  ECharts会找到两组数据之间的差异然后通过合适的动画去表现数据的变化
+
+  通过mCharts.setOption实现
+
+- 动画的配置
+
+  开启动画：anmiation: true
+
+  动画时长：animationDuration: 500
+
+  缓动动画：animationEasing: 'linear'
+
+  动画阈值：animationThreshold: 8
+
+> 交互API
+
+- 全局echarts对象
+
+  全局echarts对象是引入echarts.js文件之后就可以直接使用的
+
+  常用方法：init、registerTheme、registerMap、connect(实现多图互动，比如下载的时候多个echarts图表一起下载)
+
+- echartsInstance对象
+
+  echartsInstance对象是通过echarts.init方法调用之后得到的
+
+  常用方法：setOption、resize、on/off、dispatchAction、clear、dispose
+
+  on/off：事件处理，可以处理鼠标事件和echarts的事件，参考：https://echarts.apache.org/zh/api.html#events

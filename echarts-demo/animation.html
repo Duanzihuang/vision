@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>增量动画</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.js"></script>
+  </head>
+  <body>
+    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <button id="modify">更改数据</button>&nbsp;&nbsp;<button id="add">
+      增加数据
+    </button>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'))
+
+      // 指定图表的配置项和数据
+      const xDataArray = ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+      const yDataArray = [5, 20, 36, 10, 10, 20]
+      var option = {
+        title: {
+          text: 'ECharts 增量动画示例'
+        },
+        tooltip: {},
+        legend: {
+          data: ['销量']
+        },
+        xAxis: {
+          data: xDataArray
+        },
+        yAxis: {},
+        series: [
+          {
+            name: '销量',
+            type: 'bar',
+            data: yDataArray
+          }
+        ]
+      }
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option)
+
+      var btnModify = document.querySelector('#modify')
+      btnModify.onclick = function () {
+        var option = {
+          series: [
+            {
+              data: [5, 30, 40, 10, 10, 20]
+            }
+          ]
+        }
+
+        myChart.setOption(option)
+      }
+
+      var btnAdd = document.querySelector('#add')
+      btnAdd.onclick = function () {
+        xDataArray.push('靴子')
+        yDataArray.push(30)
+        var option = {
+          xAxis: {
+            data: xDataArray
+          },
+          series: [
+            {
+              data: yDataArray
+            }
+          ]
+        }
+
+        myChart.setOption(option)
+      }
+    </script>
+  </body>
+</html>

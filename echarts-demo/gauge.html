@@ -3,37 +3,69 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>仪表盘</title>
+    <title>调色盘</title>
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.0-alpha.1/echarts.js"></script>
   </head>
   <body>
     <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
     <div id="main" style="width: 600px;height:400px;"></div>
     <script type="text/javascript">
-      //1. ECharts最基本的代码结构
-      //2. 准备数据, 设置给series下的data
-      //3. 将type的值设置为gauge
-
       // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById('main'))
 
       // 指定图表的配置项和数据
       var option = {
         title: {
-          text: 'ECharts 仪表盘示例'
+          text: 'ECharts 入门示例'
         },
+        tooltip: {},
+        legend: {
+          data: ['销量']
+        },
+        xAxis: {
+          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+        },
+        yAxis: {},
         series: [
           {
-            type: 'gauge',
-            data: [
-              {
-                value: 97
-                // itemStyle: { // 指针的样式
-                //   color: 'pink' // 指针的颜色
-                // }
-              } // 每一个对象，代表一个指针
-            ]
-            // min: 50 // min max 控制仪表盘数值范围
+            name: '销量',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10, 20],
+            itemStyle: {
+              color: {
+                type: 'linear', // 线性渐变
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [
+                  {
+                    offset: 0,
+                    color: 'red' // 0%处的颜色为红色
+                  },
+                  {
+                    offset: 1,
+                    color: 'blue' // 100%处的颜色为蓝色
+                  }
+                ]
+              }
+              // color: {
+              //   type: 'radial',
+              //   x: 0.5,
+              //   y: 0.5,
+              //   r: 0.5,
+              //   colorStops: [
+              //     {
+              //       offset: 0,
+              //       color: 'red' // 0%处的颜色
+              //     },
+              //     {
+              //       offset: 1,
+              //       color: 'blue' // 1%处的颜色
+              //     }
+              //   ]
+              // }
+            }
           }
         ]
       }

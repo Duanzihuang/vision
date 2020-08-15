@@ -5,7 +5,7 @@
 
 效果
 
-![](assets/introduction.png)、
+![introduction](assets/introduction.png)
 
 代码
 

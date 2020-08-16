@@ -127,7 +127,7 @@
 
 效果
 
-![](assets/bar.png)
+![bar](assets/bar.png)
 
 代码
 
@@ -282,7 +282,7 @@
 
 效果
 
-![](assets/line.png)
+![line](assets/line.png)
 
 代码
 
@@ -361,7 +361,7 @@
 
 效果
 
-![](assets/scatter.png)
+![scatter](assets/scatter.png)
 
 代码
 
@@ -474,7 +474,7 @@
 
 效果
 
-![](assets/pie.png)
+![pie](assets/pie.png)
 
 代码
 
@@ -578,7 +578,7 @@
 
 效果：
 
-![](assets/map.png)
+![map](assets/map.png)
 
 代码：
 
@@ -717,7 +717,7 @@
 
 效果：
 
-![](assets/radar.png)
+![radar.png](assets/radar.png)
 
 代码：
 
@@ -818,7 +818,7 @@
 
 效果：
 
-![](assets/gauge.png)
+![gauge.png](assets/gauge.png)
 
 代码：
 

@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "koa": "^2.13.0"
+    "koa": "^2.13.0",
+    "ws": "^7.3.1"
   }
 }

@@ -33,6 +33,12 @@ const routes = [
     name: 'RankPage',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/RankPage.vue')
+  },
+  {
+    path: '/hot',
+    name: 'HotPage',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/HotPage.vue')
   }
 ]
 

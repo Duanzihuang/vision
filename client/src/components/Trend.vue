@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { getTrendData } from '@/api/trend'
+// import { getTrendData } from '@/api/trend'
 export default {
   data () {
     return {
@@ -35,14 +35,24 @@ export default {
       titleFontSize: 10 // 标题的字体大小
     }
   },
+  created () {
+    this.$socket.registerCallBack('trendData', this.getData)
+  },
   mounted () {
     this.initChart()
-    this.getData()
+    // this.getData()
+    this.$socket.send({
+      action: 'getData',
+      chartName: 'trend',
+      socketType: 'trendData',
+      value: ''
+    })
     window.addEventListener('resize', this.screenAdapter)
     this.screenAdapter()
   },
   destroyed () {
     window.removeEventListener('resize', this.screenAdapter)
+    this.$socket.unRegisterCallBack('trendData')
   },
   computed: {
     selectTypes () {
@@ -107,9 +117,11 @@ export default {
       this.showChoice = false
       this.updateChart()
     },
-    async getData () {
-      const res = await getTrendData()
-      this.allData = res.data
+    // async getData () {
+    getData (res) {
+      // const res = await getTrendData()
+      // this.allData = res.data
+      this.allData = res
 
       this.updateChart()
     },

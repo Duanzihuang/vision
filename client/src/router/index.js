@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/rank'
+    redirect: '/stock'
   },
   {
     path: '/sellerpage',
@@ -39,6 +39,12 @@ const routes = [
     name: 'HotPage',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/HotPage.vue')
+  },
+  {
+    path: '/stock',
+    name: 'StockPage',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/StockPage.vue')
   }
 ]
 

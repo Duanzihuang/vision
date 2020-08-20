@@ -58,6 +58,8 @@ export default class SocketService {
             JSON.parse(msgObj.data)
           )
         }
+      } else if (msgObj.action === 'fullScreen') {
+        this.callBackMapping[msgObj.socketType].call(this, msgObj)
       }
     }
   }

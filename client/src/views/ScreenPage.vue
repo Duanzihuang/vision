@@ -15,33 +15,110 @@
     </header>
     <div class="screen-body">
       <section class="screen-left">
-        <div id="left-top">
+        <div
+          id="left-top"
+          :class="[fullScreenStatus.trend ? 'fullscreen' : '']"
+        >
           <!-- 销售趋势图表 -->
-          <TrendPage />
+          <Trend ref="trend" />
+          <div class="resize">
+            <!-- <span class="iconfont icon-compress-alt"></span>-->
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.trend ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+              @click="changeSize('trend')"
+            ></span>
+          </div>
         </div>
-        <div id="left-bottom">
+        <div
+          id="left-bottom"
+          :class="[fullScreenStatus.seller ? 'fullscreen' : '']"
+        >
           <!-- 商家销售金额表 -->
-          <SellerPage />
+          <Seller ref="seller" />
+          <div class="resize">
+            <!-- <span class="iconfont icon-compress-alt"></span>-->
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.seller
+                  ? 'icon-compress-alt'
+                  : 'icon-expand-alt'
+              ]"
+              @click="changeSize('seller')"
+            ></span>
+          </div>
         </div>
       </section>
       <section class="screen-middle">
-        <div id="middle-top">
+        <div
+          id="middle-top"
+          :class="[fullScreenStatus.map ? 'fullscreen' : '']"
+        >
           <!-- 商家分布图表 -->
-          <MapPage />
+          <Map ref="map" />
+          <div class="resize">
+            <!-- <span class="iconfont icon-compress-alt"></span>-->
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.map ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+              @click="changeSize('map')"
+            ></span>
+          </div>
         </div>
-        <div id="middle-bottom">
+        <div
+          id="middle-bottom"
+          :class="[fullScreenStatus.rank ? 'fullscreen' : '']"
+        >
           <!-- 地区销售排行图表 -->
-          <RankPage />
+          <Rank ref="rank" />
+          <div class="resize">
+            <!-- <span class="iconfont icon-compress-alt"></span>-->
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.rank ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+              @click="changeSize('rank')"
+            ></span>
+          </div>
         </div>
       </section>
       <section class="screen-right">
-        <div id="right-top">
+        <div id="right-top" :class="[fullScreenStatus.hot ? 'fullscreen' : '']">
           <!-- 热销商品占比图表 -->
-          <HotPage />
+          <Hot ref="hot" />
+          <div class="resize">
+            <!-- <span class="iconfont icon-compress-alt"></span>-->
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.hot ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+              @click="changeSize('hot')"
+            ></span>
+          </div>
         </div>
-        <div id="right-bottom">
+        <div
+          id="right-bottom"
+          :class="[fullScreenStatus.stock ? 'fullscreen' : '']"
+        >
           <!-- 库存销量分析图表 -->
-          <StockPage />
+          <Stock ref="stock" />
+          <div class="resize">
+            <!-- <span class="iconfont icon-compress-alt"></span>-->
+            <span
+              :class="[
+                'iconfont',
+                fullScreenStatus.stock ? 'icon-compress-alt' : 'icon-expand-alt'
+              ]"
+              @click="changeSize('stock')"
+            ></span>
+          </div>
         </div>
       </section>
     </div>
@@ -49,20 +126,63 @@
 </template>
 
 <script>
-import TrendPage from '@/views/TrendPage'
-import SellerPage from '@/views/SellerPage'
-import MapPage from '@/views/MapPage'
-import RankPage from '@/views/RankPage'
-import HotPage from '@/views/HotPage'
-import StockPage from '@/views/StockPage'
+import Trend from '@/components/Trend'
+import Seller from '@/components/Seller'
+import Map from '@/components/Map'
+import Rank from '@/components/Rank'
+import Hot from '@/components/Hot'
+import Stock from '@/components/Stock'
 export default {
+  data () {
+    return {
+      fullScreenStatus: {
+        trend: false,
+        seller: false,
+        map: false,
+        rank: false,
+        hot: false,
+        stock: false
+      }
+    }
+  },
+  created () {
+    this.$socket.registerCallBack('fullScreen', this.recvData)
+  },
+  destroyed () {
+    this.$socket.unRegisterCallBack('fullScreen')
+  },
   components: {
-    TrendPage,
-    SellerPage,
-    MapPage,
-    RankPage,
-    HotPage,
-    StockPage
+    Trend,
+    Seller,
+    Map,
+    Rank,
+    Hot,
+    Stock
+  },
+  methods: {
+    changeSize (chartName) {
+      // 1.改变fullScreenStatus的数据
+      //   this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName]
+      // 2.需要调用每一个图表组件的screenAdapter的方法
+      //   this.$nextTick(() => {
+      //     this.$refs[chartName].screenAdapter()
+      //   })
+
+      // 实现全屏切换的联动效果
+      const targetValue = !this.fullScreenStatus[chartName]
+      this.$socket.send({
+        action: 'fullScreen',
+        socketType: 'fullScreen',
+        chartName: chartName,
+        value: targetValue
+      })
+    },
+    recvData ({ value, chartName }) {
+      this.fullScreenStatus[chartName] = value
+      this.$nextTick(() => {
+        this.$refs[chartName].screenAdapter()
+      })
+    }
   }
 }
 </script>

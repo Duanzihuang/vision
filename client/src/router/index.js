@@ -5,10 +5,10 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    redirect: '/stock'
+    redirect: '/screen'
   },
   {
-    path: '/sellerpage',
+    path: '/seller',
     name: 'SellerPage',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -45,6 +45,12 @@ const routes = [
     name: 'StockPage',
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/StockPage.vue')
+  },
+  {
+    path: '/screen',
+    name: 'ScreenPage',
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/ScreenPage.vue')
   }
 ]
 

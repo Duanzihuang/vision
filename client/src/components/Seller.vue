@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getSellerData } from '@/api/seller'
+// import { getSellerData } from '@/api/seller'
 export default {
   data () {
     return {
@@ -17,15 +17,25 @@ export default {
       timer: null // 定时器
     }
   },
+  created () {
+    this.$socket.registerCallBack('sellerData', this.getData)
+  },
   mounted () {
     this.initChart()
-    this.getData()
+    this.$socket.send({
+      action: 'getData',
+      chartName: 'seller',
+      socketType: 'sellerData',
+      value: ''
+    })
+    // this.getData()
     window.addEventListener('resize', this.screenAdapter)
     // 在页面加载完成的时候，主动进行屏幕的适配
     this.screenAdapter()
   },
   destroyed () {
     window.removeEventListener('resize', this.screenAdapter)
+    this.$socket.unRegisterCallBack('sellerData')
     clearInterval(this.timer)
   },
   methods: {
@@ -100,10 +110,12 @@ export default {
       })
     },
     // 获取服务器数据
-    async getData () {
-      const res = await getSellerData()
+    // async getData () {
+    getData (res) {
+      // const res = await getSellerData()
 
-      this.allData = res.data
+      // this.allData = res.data
+      this.allData = res
 
       // 排序
       this.allData.sort((a, b) => a.value - b.value)

@@ -51,7 +51,6 @@ export default class SocketService {
 
     this.ws.onmessage = msg => {
       const msgObj = JSON.parse(msg.data)
-
       if (msgObj.action === 'getData') {
         if (msgObj.socketType) {
           this.callBackMapping[msgObj.socketType].call(

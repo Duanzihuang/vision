@@ -187,7 +187,7 @@ export default {
     },
     // 屏幕适配
     screenAdapter () {
-      this.titleFontSize = (this.$refs.trendRef.offsetWidth / 100) * 2.5
+      this.titleFontSize = (this.$refs.trendRef.offsetWidth / 100) * 3.6
       const adapterOption = {
         legend: {
           itemWidth: this.titleFontSize,

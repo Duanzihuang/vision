@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { getHotData } from '@/api/hot'
+// import { getHotData } from '@/api/hot'
 export default {
   data () {
     return {
@@ -21,6 +21,9 @@ export default {
       currentIndex: 0,
       titleFontSize: 0
     }
+  },
+  created () {
+    this.$socket.registerCallBack('hotData', this.getData)
   },
   computed: {
     commonStyle () {
@@ -36,13 +39,19 @@ export default {
   },
   mounted () {
     this.initChart()
-    this.getData()
-    this.updateChart()
+    this.$socket.send({
+      action: 'getData',
+      chartName: 'hotproduct',
+      socketType: 'hotData',
+      value: ''
+    })
+    // this.getData()
     window.addEventListener('resize', this.screenAdapter)
     this.screenAdapter()
   },
   destroyed () {
     window.removeEventListener('resize', this.screenAdapter)
+    this.$socket.unRegisterCallBack('hotData')
   },
   methods: {
     initChart () {
@@ -84,9 +93,10 @@ export default {
       this.echartInstance.setOption(initOption)
     },
     // 获取数据
-    async getData () {
-      const res = await getHotData()
-      this.allData = res.data
+    // async getData () {
+    getData (res) {
+      // const res = await getHotData()
+      this.allData = res
       this.updateChart()
     },
     // 更新图表
@@ -144,8 +154,11 @@ export default {
           }
         },
         legend: {
-          itemWidth: this.titleFontSize / 2,
-          itemHeight: this.titleFontSize / 2,
+          // itemWidth: this.titleFontSize / 2,
+          // itemHeight: this.titleFontSize / 2,
+          itemWidth: this.titleFontSize,
+          itemHeight: this.titleFontSize,
+          itemGap: this.titleFontSize,
           textStyle: {
             fontSize: this.titleFontSize / 2
           }

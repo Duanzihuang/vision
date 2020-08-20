@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import { getChinaMapData, getMapData, getProvinceMapData } from '@/api/map'
+// import { getChinaMapData, getMapData, getProvinceMapData } from '@/api/map'
+import { getChinaMapData, getProvinceMapData } from '@/api/map'
 import { getProvinceMapInfo } from '@/utils/map_utils'
 export default {
   data () {
@@ -14,14 +15,24 @@ export default {
       mapData: {} // 所获取的省份的地图矢量数据
     }
   },
+  created () {
+    this.$socket.registerCallBack('mapData', this.getData)
+  },
   mounted () {
     this.initChart()
-    this.getData()
+    // this.getData()
+    this.$socket.send({
+      action: 'getData',
+      chartName: 'map',
+      socketType: 'mapData',
+      value: ''
+    })
     window.addEventListener('resize', this.screenAdapter)
     this.screenAdapter()
   },
   destroyed () {
     window.removeEventListener('resize', this.screenAdapter)
+    this.$socket.unRegisterCallBack('mapData')
   },
   methods: {
     async initChart () {
@@ -70,10 +81,13 @@ export default {
       }
       this.echartInstance.setOption(initOption)
     },
-    async getData () {
-      const res = await getMapData()
-      const legendData = res.data.map(item => item.name)
-      const seriesArr = res.data.map(item => {
+    // async getData () {
+    getData (res) {
+      // const res = await getMapData()
+      // const legendData = res.data.map(item => item.name)
+      // const seriesArr = res.data.map(item => {
+      const legendData = res.map(item => item.name)
+      const seriesArr = res.map(item => {
         return {
           type: 'effectScatter',
           name: item.name,

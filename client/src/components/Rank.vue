@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getRankData } from '@/api/rank'
+// import { getRankData } from '@/api/rank'
 export default {
   data () {
     return {
@@ -16,15 +16,25 @@ export default {
       timerId: null
     }
   },
+  created () {
+    this.$socket.registerCallBack('rankData', this.getData)
+  },
   mounted () {
     this.initChart()
-    this.updateChart()
+    // this.updateChart()
+    this.$socket.send({
+      action: 'getData',
+      chartName: 'rank',
+      socketType: 'rankData',
+      value: ''
+    })
     this.startInterval()
     window.addEventListener('resize', this.screenAdapter)
     this.screenAdapter()
   },
   destroyed () {
     window.removeEventListener('resize', this.screenAdapter)
+    this.$socket.unRegisterCallBack('rankData')
     clearInterval(this.timerId)
   },
   methods: {
@@ -70,7 +80,12 @@ export default {
       }
       this.echartInstance.setOption(initOption)
     },
-    async updateChart () {
+    getData (res) {
+      this.allData = res
+
+      this.updateChart()
+    },
+    updateChart () {
       const colorArr = [
         ['#0BA82C', '#4FF778'],
         ['#2E72BF', '#23E5E5'],
@@ -78,10 +93,12 @@ export default {
       ]
       // 处理图表需要的数据
       // 所有省份所形成的数组
-      const res = await getRankData()
-      this.allData = res.data
-      const names = res.data.map(item => item.name)
-      const values = res.data.map(item => item.value)
+      // const res = await getRankData()
+      // this.allData = res.data
+      // const names = res.data.map(item => item.name)
+      // const values = res.data.map(item => item.value)
+      const names = this.allData.map(item => item.name)
+      const values = this.allData.map(item => item.value)
       const dataOption = {
         xAxis: {
           data: names

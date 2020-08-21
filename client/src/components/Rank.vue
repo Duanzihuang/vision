@@ -6,6 +6,7 @@
 
 <script>
 // import { getRankData } from '@/api/rank'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -14,6 +15,17 @@ export default {
       startValue: 0,
       endValue: 9,
       timerId: null
+    }
+  },
+  computed: {
+    ...mapGetters(['getTheme'])
+  },
+  watch: {
+    getTheme () {
+      this.echartInstance.dispose() // 销毁之前的echarts实例
+      this.initChart() // 重新创建echarts实例
+      this.screenAdapter() // 重新进行屏幕适配
+      this.updateChart() // 重新绘制图表
     }
   },
   created () {
@@ -39,7 +51,10 @@ export default {
   },
   methods: {
     initChart () {
-      this.echartInstance = this.$echarts.init(this.$refs.rankRef, 'chalk')
+      this.echartInstance = this.$echarts.init(
+        this.$refs.rankRef,
+        this.getTheme
+      )
       this.echartInstance.on('mousemove', () => {
         clearInterval(this.timerId)
       })

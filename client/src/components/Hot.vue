@@ -13,6 +13,8 @@
 
 <script>
 // import { getHotData } from '@/api/hot'
+import { getTheme } from '@/utils/theme_utils'
+import { mapState } from 'vuex'
 export default {
   data () {
     return {
@@ -26,15 +28,25 @@ export default {
     this.$socket.registerCallBack('hotData', this.getData)
   },
   computed: {
+    ...mapState(['theme']),
     commonStyle () {
       return {
-        fontSize: this.titleFontSize + 'px'
+        fontSize: this.titleFontSize + 'px',
+        color: getTheme(this.theme).titleColor
       }
     },
     catTitle () {
       if (!this.allData) return ''
 
       return this.allData[this.currentIndex].name
+    }
+  },
+  watch: {
+    theme () {
+      this.echartInstance.dispose() // 销毁之前的echarts实例
+      this.initChart() // 重新创建echarts实例
+      this.screenAdapter() // 重新进行屏幕适配
+      this.updateChart() // 重新绘制图表
     }
   },
   mounted () {
@@ -55,7 +67,7 @@ export default {
   },
   methods: {
     initChart () {
-      this.echartInstance = this.$echarts.init(this.$refs.hotRef, 'chalk')
+      this.echartInstance = this.$echarts.init(this.$refs.hotRef, this.theme)
       const initOption = {
         title: {
           text: '▎热销商品的占比',

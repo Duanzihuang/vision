@@ -8,11 +8,24 @@
 // import { getChinaMapData, getMapData, getProvinceMapData } from '@/api/map'
 import { getChinaMapData, getProvinceMapData } from '@/api/map'
 import { getProvinceMapInfo } from '@/utils/map_utils'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
       echartInstance: null,
+      allData: null,
       mapData: {} // 所获取的省份的地图矢量数据
+    }
+  },
+  computed: {
+    ...mapGetters(['getTheme'])
+  },
+  watch: {
+    getTheme () {
+      this.echartInstance.dispose() // 销毁之前的echarts实例
+      this.initChart() // 重新创建echarts实例
+      this.screenAdapter() // 重新进行屏幕适配
+      this.updateChart() // 重新绘制图表
     }
   },
   created () {
@@ -36,7 +49,7 @@ export default {
   },
   methods: {
     async initChart () {
-      this.echartInstance = this.$echarts.init(this.$refs.mapRef, 'chalk')
+      this.echartInstance = this.$echarts.init(this.$refs.mapRef, this.getTheme)
       this.echartInstance.on('click', async arg => {
         const provinceMapInfo = getProvinceMapInfo(arg.name)
         try {
@@ -86,8 +99,13 @@ export default {
       // const res = await getMapData()
       // const legendData = res.data.map(item => item.name)
       // const seriesArr = res.data.map(item => {
-      const legendData = res.map(item => item.name)
-      const seriesArr = res.map(item => {
+      this.allData = res
+
+      this.updateChart()
+    },
+    updateChart () {
+      const legendData = this.allData.map(item => item.name)
+      const seriesArr = this.allData.map(item => {
         return {
           type: 'effectScatter',
           name: item.name,

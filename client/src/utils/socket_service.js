@@ -31,7 +31,8 @@ export default class SocketService {
       return
     }
 
-    this.ws = new WebSocket('ws://127.0.0.1:9998')
+    // this.ws = new WebSocket('ws://127.0.0.1:9998')
+    this.ws = new WebSocket(process.env.VUE_APP_SOCKETURL)
 
     this.ws.onopen = () => {
       this.connected = true
@@ -59,6 +60,8 @@ export default class SocketService {
           )
         }
       } else if (msgObj.action === 'fullScreen') {
+        this.callBackMapping[msgObj.socketType].call(this, msgObj)
+      } else if (msgObj.action === 'changeTheme') {
         this.callBackMapping[msgObj.socketType].call(this, msgObj)
       }
     }

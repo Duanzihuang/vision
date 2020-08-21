@@ -1,15 +1,15 @@
 <template>
-  <div class="screen-container">
+  <div class="screen-container" :style="containerStyle">
     <header class="screen-header">
       <div>
-        <img src="/static/img/header_border_dark.png" alt="" />
+        <img :src="headerSrc" alt="" />
       </div>
       <span class="logo">
-        <img src="/static/img/logo_dark.png" alt="" />
+        <img :src="logoSrc" alt="" />
       </span>
       <span class="title">电商平台实时监控系统</span>
       <div class="title-right">
-        <img src="/static/img/qiehuan_dark.png" class="qiehuan" />
+        <img :src="themeSrc" class="qiehuan" @click="handleThemeChange" />
         <span class="datetime">2049-01-01 00:00:00</span>
       </div>
     </header>
@@ -132,6 +132,8 @@ import Map from '@/components/Map'
 import Rank from '@/components/Rank'
 import Hot from '@/components/Hot'
 import Stock from '@/components/Stock'
+import { mapState } from 'vuex'
+import { getTheme } from '@/utils/theme_utils'
 export default {
   data () {
     return {
@@ -147,9 +149,11 @@ export default {
   },
   created () {
     this.$socket.registerCallBack('fullScreen', this.recvData)
+    this.$socket.registerCallBack('changeTheme', this.changeTheme)
   },
   destroyed () {
     this.$socket.unRegisterCallBack('fullScreen')
+    this.$socket.unRegisterCallBack('changeTheme')
   },
   components: {
     Trend,
@@ -158,6 +162,24 @@ export default {
     Rank,
     Hot,
     Stock
+  },
+  computed: {
+    ...mapState(['theme']),
+    headerSrc () {
+      return `/static/img/${getTheme(this.theme).headerBorderSrc}`
+    },
+    logoSrc () {
+      return `/static/img/${getTheme(this.theme).logoSrc}`
+    },
+    themeSrc () {
+      return `/static/img/${getTheme(this.theme).themeSrc}`
+    },
+    containerStyle () {
+      return {
+        backgroundColor: getTheme(this.theme).backgroundColor,
+        color: getTheme(this.theme).titleColor
+      }
+    }
   },
   methods: {
     changeSize (chartName) {
@@ -182,6 +204,18 @@ export default {
       this.$nextTick(() => {
         this.$refs[chartName].screenAdapter()
       })
+    },
+    handleThemeChange () {
+      // this.$store.commit('changeTheme')
+      this.$socket.send({
+        action: 'changeTheme',
+        socketType: 'changeTheme',
+        chartName: '',
+        value: ''
+      })
+    },
+    changeTheme () {
+      this.$store.commit('changeTheme')
     }
   }
 }

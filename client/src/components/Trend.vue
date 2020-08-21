@@ -25,6 +25,8 @@
 
 <script>
 // import { getTrendData } from '@/api/trend'
+import { getTheme } from '@/utils/theme_utils'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -55,6 +57,7 @@ export default {
     this.$socket.unRegisterCallBack('trendData')
   },
   computed: {
+    ...mapGetters(['getTheme']),
     selectTypes () {
       if (!this.allData) {
         return []
@@ -72,7 +75,8 @@ export default {
     // 设置给标题的样式
     comStyle () {
       return {
-        fontSize: this.titleFontSize + 'px'
+        fontSize: this.titleFontSize + 'px',
+        color: getTheme(this.getTheme).titleColor
       }
     },
     marginStyle () {
@@ -81,10 +85,21 @@ export default {
       }
     }
   },
+  watch: {
+    getTheme () {
+      this.echartInstance.dispose() // 销毁之前的echarts实例
+      this.initChart() // 重新创建echarts实例
+      this.screenAdapter() // 重新进行屏幕适配
+      this.updateChart() // 重新绘制图表
+    }
+  },
   methods: {
     // 初始化Chart
     initChart () {
-      this.echartInstance = this.$echarts.init(this.$refs.trendRef, 'chalk')
+      this.echartInstance = this.$echarts.init(
+        this.$refs.trendRef,
+        this.getTheme
+      )
       const initOption = {
         legend: {
           left: 20,

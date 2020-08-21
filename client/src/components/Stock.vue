@@ -6,6 +6,7 @@
 
 <script>
 // import { getStockData } from '@/api/stock'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -13,6 +14,17 @@ export default {
       allData: null,
       currentIndex: 0,
       timerId: null
+    }
+  },
+  computed: {
+    ...mapGetters(['getTheme'])
+  },
+  watch: {
+    getTheme () {
+      this.echartInstance.dispose() // 销毁之前的echarts实例
+      this.initChart() // 重新创建echarts实例
+      this.screenAdapter() // 重新进行屏幕适配
+      this.updateChart() // 重新绘制图表
     }
   },
   created () {
@@ -38,7 +50,10 @@ export default {
   },
   methods: {
     initChart () {
-      this.echartInstance = this.$echarts.init(this.$refs.stockRef, 'chalk')
+      this.echartInstance = this.$echarts.init(
+        this.$refs.stockRef,
+        this.getTheme
+      )
       this.echartInstance.on('mousemove', () => {
         clearInterval(this.timerId)
       })

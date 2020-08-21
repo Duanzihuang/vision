@@ -13,7 +13,7 @@ app.use(require('./middleware/koa_response_header'))
 app.use(require('./middleware/koa_response_data'))
 
 // 监听端口
-app.listen(3000)
+app.listen(9997)
 
 const webSocketService = require('./service/websocket_service')
 // 开启服务端的WebSocket监听

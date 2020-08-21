@@ -6,6 +6,7 @@
 
 <script>
 // import { getSellerData } from '@/api/seller'
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -15,6 +16,17 @@ export default {
       pageSize: 5, // 页容量
       totalPage: 0, // 一共有多少页
       timer: null // 定时器
+    }
+  },
+  computed: {
+    ...mapGetters(['getTheme'])
+  },
+  watch: {
+    getTheme () {
+      this.chartInstance.dispose() // 销毁之前的echarts实例
+      this.initChart() // 重新创建echarts实例
+      this.screenAdapter() // 重新进行屏幕适配
+      this.updateChart() // 重新绘制图表
     }
   },
   created () {
@@ -41,7 +53,10 @@ export default {
   methods: {
     // 初始化图表
     initChart () {
-      this.chartInstance = this.$echarts.init(this.$refs.sellerRef, 'chalk')
+      this.chartInstance = this.$echarts.init(
+        this.$refs.sellerRef,
+        this.getTheme
+      )
       // 对图表初始化配置的控制
       const initOption = {
         title: {

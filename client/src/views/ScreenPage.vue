@@ -166,13 +166,13 @@ export default {
   computed: {
     ...mapState(['theme']),
     headerSrc () {
-      return `/static/img/${getTheme(this.theme).headerBorderSrc}`
+      return `static/img/${getTheme(this.theme).headerBorderSrc}`
     },
     logoSrc () {
-      return `/static/img/${getTheme(this.theme).logoSrc}`
+      return `static/img/${getTheme(this.theme).logoSrc}`
     },
     themeSrc () {
-      return `/static/img/${getTheme(this.theme).themeSrc}`
+      return `static/img/${getTheme(this.theme).themeSrc}`
     },
     containerStyle () {
       return {

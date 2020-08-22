@@ -14,7 +14,7 @@
 
 ## 效果图
 
-![effect1](/effect1.png)
+![effect1](assets/effect1.png)
 
 ![effect2](assets/effect2.png)
 
@@ -22,7 +22,7 @@
 
 http://huangjiangjun.top/vision
 
-## Echarts
+## Echarts Demo
 
 https://github.com/Duanzihuang/vision/tree/master/echarts-demo
 
